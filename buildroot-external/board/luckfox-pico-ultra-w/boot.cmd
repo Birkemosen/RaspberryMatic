@@ -1,58 +1,36 @@
-# modify bootargs, load kernel and boot it
-# fallback defaults
-setenv load_addr ${ramdisk_addr_r}
-setenv console "tty2"
-setenv loglevel "0"
-setenv bootfs 1
-setenv rootfs 2
-setenv userfs 3
-setenv gpio_button "GPIO12"
-setenv kernel_img "Image"
-setenv recoveryfs_initrd "recoveryfs-initrd"
-setenv usbstoragequirks "174c:55aa:u,2109:0715:u,152d:0578:u,152d:0579:u,152d:1561:u,174c:0829:u,14b0:0206:u,174c:225c:u,7825:a2a4:u,152d:0562:u,125f:a88a:u,152d:a583:u"
+# Luckfox Pico Ultra W Boot Commands
+# This file contains U-Boot boot commands for the board
 
-# output where we are booting from
-itest.b ${devnum} == 0 && echo "U-boot loaded from SD"
-itest.b ${devnum} == 1 && echo "U-boot loaded from eMMC"
+# Set boot delay
+setenv bootdelay 0
 
-# import environment from /boot/bootEnv.txt
-if test -e ${devtype} ${devnum}:${bootfs} bootEnv.txt; then
-  load ${devtype} ${devnum}:${bootfs} ${load_addr} bootEnv.txt
-  env import -t ${load_addr} ${filesize}
-fi
+# Set boot command for EMMC boot
+setenv bootcmd "mmc dev 0; mmc read ${kernel_addr_r} ${kernel_offset} ${kernel_size}; bootm ${kernel_addr_r}"
 
-# test if the gpio button is 0 (pressed) or if .recoveryMode exists in userfs
-# or if Image doesn't exist in the root partition
-gpio input ${gpio_button}
-if test $? -eq 0 -o -e ${devtype} ${devnum}:${userfs} /.recoveryMode -o ! -e ${devtype} ${devnum}:${rootfs} ${kernel_img}; then
-  echo "==== STARTING RECOVERY SYSTEM ===="
-  # load the initrd file
-  load ${devtype} ${devnum}:${bootfs} ${load_addr} ${recoveryfs_initrd}
-  setenv rootfs_str "/dev/ram0"
-  setenv initrd_addr_r ${load_addr}
-  setenv kernel_img "recoveryfs-Image"
-  setenv kernelfs ${bootfs}
-else
-  echo "==== NORMAL BOOT ===="
-  # get partuuid of root_num
-  part uuid ${devtype} ${devnum}:${rootfs} partuuid
-  setenv rootfs_str "PARTUUID=${partuuid}"
-  setenv initrd_addr_r "-"
-  setenv kernelfs ${rootfs}
-fi
+# Set boot arguments
+setenv bootargs "console=ttyS0,115200 root=/dev/mmcblk0p4 rootwait rw"
 
-# load devicetree
-fdt addr ${fdt_addr}
-fdt get value bootargs /chosen bootargs
+# Set kernel address
+setenv kernel_addr_r 0x80008000
+setenv kernel_offset 0x8000
+setenv kernel_size 0x400000
 
-# set bootargs
-setenv bootargs "dwc_otg.lpm_enable=0 sdhci_bcm2708.enable_llm=0 console=${console} root=${rootfs_str} ro rootfstype=ext4 fsck.repair=yes rootwait rootdelay=5 consoleblank=120 logo.nologo quiet loglevel=${loglevel} init_on_alloc=1 init_on_free=1 slab_nomerge iomem=relaxed net.ifnames=0 usb-storage.quirks=${usbstoragequirks} ${extraargs} ${bootargs}"
+# Set device tree address
+setenv fdt_addr_r 0x82000000
+setenv fdt_offset 0x400000
+setenv fdt_size 0x10000
 
-# load kernel
-load ${devtype} ${devnum}:${kernelfs} ${kernel_addr_r} ${kernel_img}
+# Set ramdisk address
+setenv ramdisk_addr_r 0x82100000
+setenv ramdisk_offset 0x410000
+setenv ramdisk_size 0x100000
 
-# boot kernel
-booti ${kernel_addr_r} ${initrd_addr_r} ${fdt_addr}
+# Set environment variables
+setenv ethaddr 00:11:22:33:44:55
+setenv ipaddr 192.168.1.100
+setenv serverip 192.168.1.1
+setenv netmask 255.255.255.0
+setenv gatewayip 192.168.1.1
 
-echo "Boot failed, resetting..."
-reset
+# Save environment
+saveenv

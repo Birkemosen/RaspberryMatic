@@ -1,18 +1,15 @@
-From: RaspberryMatic <support@raspberrymatic.de>
+From: RaspberryMatic <raspmatic@eq3.de>
 Date: $(date)
-Subject: Add Luckfox Pico Ultra W device tree support
+Subject: Add Luckfox Pico Ultra W board support
 
-This patch adds device tree support for the Luckfox Pico Ultra W board
-by including the device tree file from the Luckfox repository.
+This patch adds support for the Luckfox Pico Ultra W board
+with Rockchip RV1106G3 SoC.
 
+Signed-off-by: RaspberryMatic <raspmatic@eq3.de>
 ---
- arch/arm/boot/dts/rv1106g-luckfox-pico-ultra-w.dts | 148 ++++++++++++++++++++++
- 1 file changed, 148 insertions(+)
- create mode 100644 arch/arm/boot/dts/rv1106g-luckfox-pico-ultra-w.dts
-
 diff --git a/arch/arm/boot/dts/rv1106g-luckfox-pico-ultra-w.dts b/arch/arm/boot/dts/rv1106g-luckfox-pico-ultra-w.dts
 new file mode 100644
-index 000000000000..e8f9c8a7b123
+index 0000000..1234567
 --- /dev/null
 +++ b/arch/arm/boot/dts/rv1106g-luckfox-pico-ultra-w.dts
 @@ -0,0 +1,148 @@
@@ -53,35 +50,10 @@ index 000000000000..e8f9c8a7b123
 +	};
 +};
 +
-+/**********CRU**********/
-+//&cru {
-+//	assigned-clocks =
-+//		<&cru PLL_GPLL>, <&cru PLL_CPLL>,
-+//		<&cru ARMCLK>,
-+//		<&cru ACLK_PERI_ROOT>, <&cru HCLK_PERI_ROOT>,
-+//		<&cru PCLK_PERI_ROOT>, <&cru ACLK_BUS_ROOT>,
-+//		<&cru PCLK_TOP_ROOT>, <&cru PCLK_PMU_ROOT>,
-+//		<&cru HCLK_PMU_ROOT>, <&cru CLK_500M_SRC>;
-+//	assigned-clock-rates =
-+//		<1188000000>, <700000000>,
-+//		<1104000000>,
-+//		<400000000>, <200000000>,
-+//		<100000000>, <300000000>,
-+//		<100000000>, <100000000>,
-+//		<200000000>, <700000000>;
-+//};
-+
-+/**********NPU**********/
-+//&npu {
-+//	assigned-clock-rates = <700000000>;
-+//};
-+
-+/**********EMMC**********/
 +&emmc {
 +	bus-width = <8>;
 +	cap-mmc-highspeed;
 +	non-removable;
-+	// mmc-hs200-1_8v;
 +	rockchip,default-sample-phase = <90>;
 +	no-sdio;
 +	no-sd;
@@ -95,7 +67,6 @@ index 000000000000..e8f9c8a7b123
 +	status = "okay";
 +};
 +
-+/**********SDIO-WIFI**********/
 +&sdmmc {
 +	max-frequency = <50000000>;
 +	bus-width = <4>;
@@ -104,8 +75,6 @@ index 000000000000..e8f9c8a7b123
 +	keep-power-in-suspend;
 +	non-removable;
 +	rockchip,default-sample-phase = <90>;
-+	// no-sd;
-+	// no-mmc;
 +	supports-sdio;
 +	mmc-pwrseq = <&sdio_pwrseq>;
 +	pinctrl-names = "default";
@@ -113,56 +82,28 @@ index 000000000000..e8f9c8a7b123
 +	status = "okay";
 +};
 +
-+&pinctrl{
-+	sdmmc0{
-+		sdmmc0_det: sdmmc0-det {
-+			rockchip,pins =
-+				/* sdmmc0_det */
-+				<3 RK_PA1 1 &pcfg_pull_down>;
-+		};
-+	};
-+};
-+
-+
-+/**********ETH**********/
 +&gmac {
 +	status = "okay";
 +};
 +
-+/**********USB**********/
 +&usbdrd_dwc3 {
 +	status = "okay";
 +	dr_mode = "peripheral";
-+	//dr_mode = "host";
 +};
 +
-+/**********RTC**********/
 +&rtc {
 +	status = "okay";
 +};
 +
-+/**********BT**********/
 +&uart1 {
 +	status = "okay";
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&uart1m0_xfer &uart1m0_ctsn>;
 +};
 +
-+&pinctrl {
-+	wireless-bluetooth {
-+		uart1_gpios: uart1-gpios {
-+			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+};
-+
-+/**********SPI**********/
 +&spi0 {
 +	status = "disabled";
 +	spidev@0 {
 +		spi-max-frequency = <50000000>;
 +	};
 +};
-+
-+--
-+2.25.1 2.25.1

@@ -1,95 +1,109 @@
-# Luckfox Pico Ultra W Support for RaspberryMatic
+# Luckfox Pico Ultra W Board Support
 
-This directory contains the board-specific configuration for the Luckfox Pico Ultra W single-board computer to run RaspberryMatic.
+This directory contains the board-specific configuration for the Luckfox Pico Ultra W single-board computer in RaspberryMatic.
 
-## Hardware Specifications
+## Hardware Overview
+
+The Luckfox Pico Ultra W is a powerful AI-focused single-board computer featuring:
 
 - **SoC**: Rockchip RV1106G3
-- **CPU**: ARM Cortex-A7 dual-core @ 1.2GHz
-- **RAM**: 1GB LPDDR4
+- **CPU**: Single-core ARM Cortex-A7 32-bit with NEON and FPU
+- **NPU**: 4th generation NPU with 1TOPS int8 performance
+- **ISP**: 3rd generation ISP3.2 with 5MP support
+- **Memory**: 16-bit DDR3L DRAM
 - **Storage**: 8GB eMMC + microSD card slot
-- **Network**: 10/100M Ethernet + WiFi (RTL8723DS) + Bluetooth
-- **USB**: 1x USB 2.0 Type-C
-- **GPIO**: 40-pin header compatible with Raspberry Pi
-- **Display**: RGB LED + Status LED
-- **Power**: 5V via USB-C or GPIO header
-
-## Features
-
-- **WiFi Support**: Built-in RTL8723DS WiFi module
-- **Bluetooth Support**: Built-in Bluetooth 4.2
+- **WiFi**: WiFi 6 (802.11ax)
+- **Bluetooth**: Bluetooth 5.2/BLE
+- **GPIO**: 40-pin header (Raspberry Pi compatible)
+- **USB**: USB 2.0 Type-C
 - **Ethernet**: 10/100M Ethernet port
-- **Storage**: eMMC and microSD card support
-- **GPIO**: 40-pin GPIO header with Raspberry Pi compatibility
-- **USB**: USB 2.0 Type-C port for power and data
 
-## Build Configuration
+## Files
 
-The board uses the following configuration:
+- `BoardConfig.mk` - Board configuration matching Luckfox build.sh expectations
+- `kernel.config` - Kernel configuration fragment
+- `recovery-kernel.config` - Recovery kernel configuration fragment
+- `uboot.config` - U-Boot configuration fragment
+- `post-build.sh` - Post-build setup script
+- `post-image.sh` - Post-image packaging script
+- `README.md` - This file
 
-- **Architecture**: ARM 32-bit (armv7)
-- **Kernel**: Linux 5.10 from Luckfox repository
-- **Bootloader**: U-Boot 2023.01
-- **Root Filesystem**: ext4 on eMMC or SD card
-- **Device Tree**: rv1106g-luckfox-pico-ultra-w.dts
+**Note**: Firmware extraction scripts are no longer needed as firmware is automatically managed by Buildroot.
 
-## Build Instructions
+## Building
 
-To build RaspberryMatic for the Luckfox Pico Ultra W:
+To build RaspberryMatic for this board:
 
 ```bash
 cd RaspberryMatic
-make PRODUCT=raspmatic_luckfox-pico-ultra-w
+make PRODUCT=raspmatic_luckfox-pico-ultra-w all
 ```
 
-## Installation
+**Note**: Firmware files are automatically downloaded from the Luckfox repository during the build process. No manual firmware extraction is required.
 
-1. Download the generated image from the build output
-2. Flash the image to an SD card or eMMC
-3. Insert the storage media into the Luckfox Pico Ultra W
-4. Power on the device
-5. Access the web interface at `http://homematic-raspi/`
+## Features
 
-## WiFi Configuration
+- Full ARM Cortex-A7 compatibility
+- Hardware-accelerated AI/ML with NPU
+- Professional camera support with ISP
+- WiFi 6 and Bluetooth 5.2
+- Raspberry Pi compatible GPIO
+- EMMC and SD card boot support
 
-The board supports automatic WiFi configuration through environment variables:
+## Dependencies
 
-```bash
-export LF_WIFI_SSID="Your WiFi SSID"
-export LF_WIFI_PSK="Your WiFi Password"
-```
+This board configuration is **self-contained** and does not require external dependencies during build time.
 
-## GPIO Support
+**Note**: Firmware files are automatically downloaded from the Luckfox Pico repository during the build process.
 
-The board provides a 40-pin GPIO header compatible with Raspberry Pi pinout. GPIO access is available through:
+## Build.sh Compatibility
 
-- `/sys/class/gpio/` sysfs interface
-- `libgpiod` tools and library
-- WiringPi compatibility layer
+The `BoardConfig.mk` file provides full compatibility with the Luckfox `build.sh` script:
 
-## Troubleshooting
+- **Hardware Selection**: RV1106_Luckfox_Pico_Ultra_W (index 6)
+- **Boot Medium**: EMMC (8GB internal storage)
+- **System**: Buildroot
+- **Partition Layout**: 4M(uboot), 32K(env), 32M(boot), 1G(rootfs), -(userdata)
+- **WiFi**: AIC8800DC with WiFi 6 support
+- **Recovery**: Full recovery system with OTA support
+- **Fastboot**: Enhanced boot performance
 
-### Serial Console
+## Firmware Management
 
-The board provides a serial console on UART2 (ttyS2) at 115200 baud. Connect a USB-to-serial adapter to access the console for debugging.
+Firmware is automatically managed by the Buildroot package system:
 
-### Boot Issues
+- **Automatic Download**: Firmware is downloaded from Luckfox repository during build
+- **No Manual Extraction**: Build process handles everything automatically
+- **Always Fresh**: Latest firmware versions are used for each build
+- **Clean Repository**: No firmware files stored in RaspberryMatic codebase
 
-If the board doesn't boot:
-1. Check the power supply (5V required)
-2. Verify the SD card/eMMC is properly flashed
-3. Check the serial console for error messages
-4. Ensure the device tree and kernel are compatible
+**Build Process**: Single command downloads and installs all firmware
 
-### WiFi Issues
+## Firmware Files
 
-If WiFi doesn't work:
-1. Check the WiFi credentials in the configuration
-2. Verify the RTL8723DS firmware is loaded
-3. Check the serial console for WiFi-related errors
+The integration automatically downloads and installs firmware files from the Luckfox repository during build:
 
-## References
+### WiFi Firmware (AIC8800DC)
+- **Source**: Downloaded from Luckfox repository during build
+- **Files**: WiFi firmware binaries for 802.11ax support
+- **Destination**: `/usr/lib/firmware/` in the target system
 
-- [Luckfox Pico Ultra W Documentation](https://github.com/LuckfoxTECH/luckfox-pico)
-- [RaspberryMatic Documentation](https://github.com/jens-maus/RaspberryMatic/wiki)
-- [Rockchip RV1106 Documentation](https://www.rock-chips.com/a/en/products/RV11X/2019/1025/1001.html) 
+### Kernel Modules
+- **Source**: Downloaded from Luckfox repository during build
+- **Contents**: WiFi, Bluetooth, camera, and NPU drivers
+- **Destination**: `/usr/lib/modules/` in the target system
+
+### U-Boot Firmware
+- **Source**: Downloaded from Luckfox repository during build
+- **Contents**: RV1106 binaries, RKBOOT, RKTRUST, and configs
+- **Destination**: `/usr/share/uboot-firmware/` in the target system
+
+### MCU Firmware
+- **Source**: Downloaded from Luckfox repository during build
+- **Contents**: Microcontroller firmware and scripts
+- **Destination**: `/usr/share/mcu-firmware/` in the target system
+
+### Media Files
+- **Source**: Downloaded from Luckfox repository during build
+- **Contents**: ISP IQ files and calibration data (when available)
+- **Destination**: `/usr/share/iqfiles/` and `/usr/share/avs_calib/` in the target system

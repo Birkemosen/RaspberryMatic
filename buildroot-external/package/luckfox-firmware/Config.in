@@ -1,0 +1,15 @@
+config BR2_PACKAGE_LUCKFOX_FIRMWARE
+	bool "Luckfox Firmware Package"
+	help
+	  Downloads and installs firmware files from Luckfox repository
+	  during the build process.
+	  
+	  This package provides:
+	  - WiFi firmware for AIC8800DC
+	  - MCU firmware for RV1106
+	  - U-Boot binaries and configuration
+	  - Kernel modules and drivers
+	  
+	  The firmware is automatically downloaded from the official
+	  Luckfox repository during build, ensuring the latest versions
+	  are always used.
