@@ -1,0 +1,29 @@
+# udev rules for Luckfox Pico devices
+# Based on LuckfoxTECH SDK specifications
+
+# Camera/ISP devices
+KERNEL=="video*", SUBSYSTEM=="video4linux", MODE="0666", GROUP="video"
+KERNEL=="media*", SUBSYSTEM=="media", MODE="0666", GROUP="video"
+
+# NPU devices (RV1106)
+KERNEL=="npu*", MODE="0666", GROUP="video"
+
+# GPIO devices
+KERNEL=="gpiochip*", SUBSYSTEM=="gpio", MODE="0666", GROUP="gpio"
+
+# I2C devices
+KERNEL=="i2c-*", SUBSYSTEM=="i2c-dev", MODE="0666", GROUP="i2c"
+
+# SPI devices
+KERNEL=="spidev*", SUBSYSTEM=="spidev", MODE="0666", GROUP="spi"
+
+# MMC/SD devices
+KERNEL=="mmcblk*", SUBSYSTEM=="block", MODE="0666", GROUP="disk"
+
+# USB devices
+KERNEL=="ttyUSB*", SUBSYSTEM=="tty", MODE="0666", GROUP="dialout"
+
+# Create device symlinks for easy access
+KERNEL=="video0", SYMLINK+="camera_main"
+KERNEL=="video1", SYMLINK+="camera_isp"
+KERNEL=="npu0", SYMLINK+="npu_main"

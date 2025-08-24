@@ -1,0 +1,14 @@
+[Unit]
+Description=Luckfox Pico NPU Service
+After=multi-user.target
+Wants=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/luckfox-pico/scripts/npu-setup.sh
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,20 @@
+config BR2_PACKAGE_LUCKFOX_PICO_DRIVERS
+	bool "luckfox-pico-drivers"
+	depends on BR2_LINUX_KERNEL
+	help
+	  Custom drivers and hardware support for Luckfox Pico boards
+	  in RaspberryMatic, based on the official LuckfoxTECH SDK.
+	  
+	  This package provides:
+	  - Camera/ISP drivers from LuckfoxTECH SDK (sysdrv/)
+	  - Media libraries for video processing (media/)
+	  - NPU drivers for AI workloads (RV1106)
+	  - Custom GPIO, I2C, SPI configurations
+	  - Board-specific hardware support
+	  - HomeMatic integration scripts
+	  
+	  The drivers are extracted from the official SDK at:
+	  https://github.com/LuckfoxTECH/luckfox-pico
+	  
+	  Note: This requires the LuckfoxTECH SDK to be available
+	  during the build process.
