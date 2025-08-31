@@ -1,0 +1,13 @@
+config BR2_TARGET_LUCKFOX_PICO_ULTRA_W
+	bool "Luckfox Pico Ultra W"
+	depends on BR2_arm
+	depends on BR2_ARM_CPU_ARMV7A
+	select BR2_PACKAGE_LUCKFOX_PICO_DRIVERS
+	help
+	  Buildroot configuration for Luckfox Pico Ultra W
+	  - RV1106 ARM Cortex-A7 SoC
+	  - 2GB RAM
+	  - eMMC storage
+	  - WiFi + Bluetooth
+	  - Camera support
+	  - NPU for AI workloads

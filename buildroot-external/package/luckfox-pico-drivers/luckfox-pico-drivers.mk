@@ -4,9 +4,9 @@
 #
 ################################################################################
 
-LUCKFOX_PICO_DRIVERS_VERSION = 1.4
-LUCKFOX_PICO_DRIVERS_SITE = https://github.com/LuckfoxTECH/luckfox-pico
-LUCKFOX_PICO_DRIVERS_SITE_METHOD = git
+LUCKFOX_PICO_DRIVERS_VERSION = main
+LUCKFOX_PICO_DRIVERS_SITE = $(TOPDIR)/../luckfox-pico
+LUCKFOX_PICO_DRIVERS_SITE_METHOD = local
 LUCKFOX_PICO_DRIVERS_LICENSE = GPL-2.0
 LUCKFOX_PICO_DRIVERS_LICENSE_FILES = LICENSE
 
@@ -108,14 +108,13 @@ LUCKFOX_PICO_DRIVERS_DEPENDENCIES = linux
 # Handle the case where SDK might not be available
 define LUCKFOX_PICO_DRIVERS_CONFIGURE_CMDS
 	# Check if SDK is properly extracted
-	if [ ! -d "$(LUCKFOX_PICO_DRIVERS_SDK_SYSDRV)" ]; then
-		echo "Warning: LuckfoxTECH SDK sysdrv directory not found"
-		echo "Drivers may not be properly built"
-	fi
-	
-	if [ ! -d "$(LUCKFOX_PICO_DRIVERS_SDK_MEDIA)" ]; then
-		echo "Warning: LuckfoxTECH SDK media directory not found"
-		echo "Media drivers may not be available"
+	if [ ! -d "$(LUCKFOX_PICO_DRIVERS_SDK_SYSDRV)" ]; then \
+		echo "Warning: LuckfoxTECH SDK sysdrv directory not found"; \
+		echo "Drivers may not be properly built"; \
+	fi; \
+	if [ ! -d "$(LUCKFOX_PICO_DRIVERS_SDK_MEDIA)" ]; then \
+		echo "Warning: LuckfoxTECH SDK media directory not found"; \
+		echo "Media drivers may not be available"; \
 	fi
 endef
 

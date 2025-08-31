@@ -1,3 +1,5 @@
 # Locally calculated
 sha256  6b19a3ae99423de2416964d67251d745910277af258b4c4c63e88fd87dbf0e27  linux-6.12.41.tar.xz
 sha256  fbb94f7db8304821126d1aa24fceb2e97c0b7dc03e5cecd94e53ebf427d64b37  stable_20250702.tar.gz
+# develop-6.1
+sha256  e0b21f5dd162324f6f65ce5eb7d11828d157754acaaa951bb1957b520f7b109d  linux-cef9074-git4.tar.gz

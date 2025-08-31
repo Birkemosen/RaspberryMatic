@@ -1,3 +1,4 @@
 # Locally calculated
 sha256  6b19a3ae99423de2416964d67251d745910277af258b4c4c63e88fd87dbf0e27  linux-6.12.41.tar.xz
 sha256  fbb94f7db8304821126d1aa24fceb2e97c0b7dc03e5cecd94e53ebf427d64b37  stable_20250702.tar.gz
+sha256  7f30f3861c84dcc58fd1bbf96404044a1fa0bc4cb066b64c241029264844a1a9  linux-develop-6.1-git4.tar.gz
